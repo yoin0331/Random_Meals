@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>隨機決定三餐</title>
+  <style>
+    body {
+      font-family: "微軟正黑體", sans-serif;
+      text-align: center;
+      background-color: #f3f8ff;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 12px 30px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 30px;
+      font-size: 22px;
+      color: #222;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🍽️ 今天三餐吃什麼？</h1>
+  <button onclick="pickMeals()">隨機決定！</button>
+
+  <div class="result" id="resultArea"></div>
+
+  <script>
+    const breakfastList = ['翰林', '萊客堡', '惟客美而美', '美式早餐屋', '永豆', '蔬菜蛋餅', '哈堡堡', '瑞麟美而美', '喜樂廚房', '麥味登', '粥王旁邊'];
+    const lunchList = ['香米', '新福', '歐姆萊斯', '雙餉丼', '滿食記', '來來炒飯', '緣杏', '遊龍', '全家', '八方'];
+    const dinnerList = ['香米', '新福', '歐姆萊斯', '雙餉丼', '滿食記', '來來炒飯', '緣杏', '八方', '24小時', '白鬍子', '咖哩老師', '麥當勞', '楊癲瘋', '迷路', '一品鍋', '阿米林'];
+
+    function randomChoice(list) {
+      const index = Math.floor(Math.random() * list.length);
+      return list[index];
+    }
+
+    function pickMeals() {
+      const breakfast = randomChoice(breakfastList);
+      const lunch = randomChoice(lunchList);
+      const dinner = randomChoice(dinnerList);
+
+      const result = `
+        早餐：${breakfast} 🥪<br>
+        午餐：${lunch} 🍛<br>
+        晚餐：${dinner} 🍲
+      `;
+      document.getElementById('resultArea').innerHTML = result;
+    }
+  </script>
+
+</body>
+</html>
