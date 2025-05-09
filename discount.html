@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>優惠計算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        input, select {
+            padding: 5px;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>優惠計算器</h1>
+    <div class="container">
+        <label for="items">商品數量：</label>
+        <input type="number" id="items" min="1" placeholder="輸入商品數量" required><br>
+
+        <label for="method">選擇優惠方式：</label>
+        <select id="method">
+            <option value="discount">第 x 件 y 折</option>
+            <option value="price">第 x 件 y 元</option>
+        </select><br>
+
+        <label for="x">優惠的商品位置 (x)：</label>
+        <input type="number" id="x" min="1" placeholder="輸入優惠商品位置" required><br>
+
+        <div id="discountSection" class="methodSection">
+            <label for="discount">折扣率 (y 折)：</label>
+            <input type="number" id="discount" min="1" max="100" placeholder="輸入折扣率 (如 80 表示 8 折)" required>
+        </div>
+
+        <div id="priceSection" class="methodSection" style="display:none;">
+            <label for="price">優惠價格 (y 元)：</label>
+            <input type="number" id="price" min="1" placeholder="輸入優惠價格" required>
+        </div>
+
+        <button onclick="calculateDiscount()">計算優惠</button>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <script>
+        // 顯示或隱藏對應的輸入欄位
+        document.getElementById('method').addEventListener('change', function() {
+            var method = this.value;
+            if (method === 'discount') {
+                document.getElementById('discountSection').style.display = 'block';
+                document.getElementById('priceSection').style.display = 'none';
+            } else {
+                document.getElementById('discountSection').style.display = 'none';
+                document.getElementById('priceSection').style.display = 'block';
+            }
+        });
+
+        function calculateDiscount() {
+            var items = parseInt(document.getElementById('items').value);
+            var method = document.getElementById('method').value;
+            var x = parseInt(document.getElementById('x').value);
+            var resultText = '';
+
+            // 檢查用戶輸入的有效性
+            if (isNaN(items) || isNaN(x) || x < 1 || x > items) {
+                resultText = '請輸入正確的商品數量和優惠商品位置。';
+                document.getElementById('result').textContent = resultText;
+                return;
+            }
+
+            // 計算價格
+            var totalPrice = 0;
+            var pricePerItem = 100; // 假設每個商品的原價是 100 元
+
+            if (method === 'discount') {
+                var discount = parseInt(document.getElementById('discount').value);
+                if (isNaN(discount) || discount <= 0 || discount > 100) {
+                    resultText = '請輸入正確的折扣率。';
+                    document.getElementById('result').textContent = resultText;
+                    return;
+                }
+                // 計算總價
+                for (var i = 1; i <= items; i++) {
+                    if (i === x) {
+                        totalPrice += pricePerItem * (discount / 100); // 第 x 件打折
+                    } else {
+                        totalPrice += pricePerItem; // 其他商品原價
+                    }
+                }
+                resultText = '總價格：' + totalPrice + ' 元 (第 ' + x + ' 件 ' + discount + ' 折)';
+            } else if (method === 'price') {
+                var price = parseInt(document.getElementById('price').value);
+                if (isNaN(price) || price <= 0) {
+                    resultText = '請輸入正確的優惠價格。';
+                    document.getElementById('result').textContent = resultText;
+                    return;
+                }
+                // 計算總價
+                for (var i = 1; i <= items; i++) {
+                    if (i === x) {
+                        totalPrice += price; // 第 x 件改為優惠價格
+                    } else {
+                        totalPrice += pricePerItem; // 其他商品原價
+                    }
+                }
+                resultText = '總價格：' + totalPrice + ' 元 (第 ' + x + ' 件 ' + price + ' 元)';
+            }
+
+            document.getElementById('result').textContent = resultText;
+        }
+    </script>
+</body>
+</html>
